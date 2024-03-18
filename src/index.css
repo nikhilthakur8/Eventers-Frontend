@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer utilities {
+    /* Hide and style thin scrollbar for Chrome, Safari, Opera, IE, Edge, and Firefox */
+    .no-scrollbar {
+        /* Hide scrollbar for Chrome, Safari, and Opera */
+        &::-webkit-scrollbar {
+            width: 5px; /* Set the desired width of the scrollbar */
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge, and Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: thin; /* Firefox */
+    }
+    .hide-scrollbar {
+        /* Hide scrollbar for Chrome, Safari, and Opera */
+        &::-webkit-scrollbar {
+            width: 5px; /* Set the desired width of the scrollbar */
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge, and Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+    .each-slide-effect > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-size: cover;
+        height: 350px;
+    }
+
+    .each-slide-effect span {
+        padding: 20px;
+        font-size: 20px;
+        background: #efefef;
+        text-align: center;
+    }
+}
