@@ -83,66 +83,6 @@ export const EventSearch = () => {
         }
     }, []);
 
-    // const handleTouchStart = (e) => {
-    //     if (isVisible) {
-    //         const handleTouchMove = (e) => {
-    //             const deltaY = e.touches[0].clientY - 85;
-    //             if (document.getElementById("bar")) {
-    //                 document.getElementById(
-    //                     "bar"
-    //                 ).style.transform = `translate(0px, ${deltaY}px)`;
-    //                 setCardClick(null);
-    //             }
-    //             if (deltaY > window.innerHeight / 6) {
-    //                 setIsVisible(false);
-    //                 setCardClick(-1);
-    //             }
-    //         };
-
-    //         const handleTouchEnd = () => {
-    //             if (document.getElementById("bar"))
-    //                 document.getElementById(
-    //                     "bar"
-    //                 ).style.transform = `translate(0px, 0px)`;
-    //             document.removeEventListener("touchmove", handleTouchMove);
-    //             document.removeEventListener("touchend", handleTouchEnd);
-    //         };
-
-    //         document.addEventListener("touchmove", handleTouchMove);
-    //         document.addEventListener("touchend", handleTouchEnd);
-    //     }
-    // };
-    // const handleMouseDown = (e) => {
-    //     if (isVisible) {
-    //         const handleMouseMove = (e) => {
-    //             const deltaY = e.clientY - 85;
-    //             if (document.getElementById("bar")) {
-    //                 document.getElementById(
-    //                     "bar"
-    //                 ).style.transform = `translate(0px, ${deltaY}px)`;
-    //                 setCardClick(null);
-    //             }
-
-    //             if (deltaY > window.innerHeight / 6) {
-    //                 setIsVisible(false);
-    //                 setCardClick(-1);
-    //             }
-    //         };
-
-    //         const handleMouseUp = () => {
-    //             if (document.getElementById("bar"))
-    //                 document.getElementById(
-    //                     "bar"
-    //                 ).style.transform = `translate(0px, 0px)`;
-    //             document.removeEventListener("mousemove", handleMouseMove);
-    //             document.removeEventListener("mouseup", handleMouseUp);
-    //         };
-
-    //         document.addEventListener("mousemove", handleMouseMove);
-    //         document.addEventListener("mouseup", handleMouseUp);
-    //     }
-    // };
-
     useEffect(() => {
         document.getElementById("bar")?.scrollBy(-2000, -2000);
     }, [eventData]);
@@ -241,8 +181,8 @@ export const EventSearch = () => {
                     <label
                         htmlFor="offline"
                         className={`border border-blue-900 ${
-                            isClicked == "Offline" && "bg-blue-600 text-white"
-                        } rounded-full mx-2 py-2 px-3 font-medium`}
+                            isClicked == "Offline" && "bg-blue-600 text-white "
+                        } rounded-full mx-2 py-2 px-3 font-medium cursor-pointer`}
                         onClick={() => setClick("Offline")}
                     >
                         Offline
@@ -251,7 +191,7 @@ export const EventSearch = () => {
                         htmlFor="online"
                         className={`border border-blue-900 ${
                             isClicked == "Online" && "bg-blue-600 text-white"
-                        } rounded-full mx-2 py-2 px-3 font-medium`}
+                        } rounded-full mx-2 py-2 px-3 font-medium cursor-pointer`}
                         onClick={() => setClick("Online")}
                     >
                         Online

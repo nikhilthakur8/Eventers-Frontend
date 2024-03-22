@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AlertCircle, CheckCircle } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 
