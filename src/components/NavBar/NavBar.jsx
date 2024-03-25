@@ -15,7 +15,7 @@ function NavBar() {
     return (
         <>
             {isMenuOpen && <HostEventSection setMenu={setMenu} />}
-            <div className=" border-b-2 border-gray-300 shadow-md h-16 w-full sticky top-0 bg-white z-[100]">
+            <div className=" border-b-2 border-gray-300 shadow-md h-16 w-full  top-0 bg-white z-40 ">
                 <nav className="flex flex-row h-full items-center justify-between">
                     <p className="lg:text-2xl border-2 border-x-blue-700  border-y-black  p-0.5  rounded-tr-lg rounded-bl-lg text-xl ml-5 font-serif text-blue-900 font-bold">
                         Eventers
