@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-export const Button = ({ onClick, w = "1/2" }) => {
+export const Button = ({ onClick }) => {
     return (
         <div
-            className={`h-20 w-full md:w-${w} px-10 flex justify-between items-center fixed bottom-0  bg-gray-200`}
+            className={`h-20 w-full md:w-3/5 px-10 flex justify-between items-center fixed bottom-0  bg-gray-200`}
         >
             <button
                 type="button "
