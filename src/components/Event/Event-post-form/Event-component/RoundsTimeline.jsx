@@ -172,7 +172,7 @@ export const RoundsTimeline = ({ onClick }) => {
                                 </div>
 
                                 {isRoundEditSectionOpen && (
-                                    <EditWrapper w="3/5">
+                                    <EditWrapper w="w-3/5">
                                         <div className="p-5 sm:p-10">
                                             <h1 className="text-3xl font-bold font-serif text-blue-900 mb-5">
                                                 Rounds Details Form
