@@ -14,6 +14,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { AlertBanner } from "../../AlertBanner";
 import { setEventData } from "../../../features/user";
 import { SuccessBanner } from "../../SuccessBanner";
+import { validateFileSize } from "../../../hooks/validateFileSize";
+import { FetchEventData } from "../../../hooks/fetchEventData";
 export const EventFormStepI = () => {
     // URL Operations
     const { eventNumber } = useParams();
@@ -26,8 +28,7 @@ export const EventFormStepI = () => {
     const [loading, setLoading] = useState(false);
     const [axiosError, setAxiosError] = useState(null);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const eventData = useSelector((state) => state.eventData);
+    const eventData = FetchEventData(eventNumber);
     document.title = "Create Event Step-I - Eventers";
 
     // React-hook-form
@@ -57,7 +58,6 @@ export const EventFormStepI = () => {
                 },
             })
             .then(({ data }) => {
-                dispatch(setEventData(data));
                 setMessage("Step I completed successfully");
                 setTimeout(() => {
                     navigate(
@@ -82,19 +82,6 @@ export const EventFormStepI = () => {
                 setLoading(false);
             });
     }
-
-    // Fetch Event Data
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        dispatch(setEventData(null));
-        axios
-            .get(`/api/v1/event/details/${eventNumber}`, {
-                withCredentials: true,
-            })
-            .then(({ data }) => {
-                dispatch(setEventData(data));
-            });
-    }, []);
 
     // useEffect for setting intial value
     useEffect(() => {
@@ -145,14 +132,7 @@ export const EventFormStepI = () => {
             setValue(fieldName, data[fieldName]);
         });
     }
-    const validateFileSize = (fileList) => {
-        const maxSize = 10 * 1024 * 1024;
-        if (fileList[0] && fileList[0].size > maxSize) {
-            return "File size should not exceed 10MB";
-        } else {
-            return true;
-        }
-    };
+
     const [image, setImage] = useState(
         "https://buffer.com/library/content/images/2023/10/free-images.jpg"
     );

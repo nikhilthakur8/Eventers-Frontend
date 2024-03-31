@@ -14,6 +14,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { SuccessBanner } from "../SuccessBanner";
 import { useNavigate } from "react-router-dom";
 import { AlertBanner } from "../AlertBanner";
+import { validateFileSize } from "../../hooks/validateFileSize";
 export const Profile = () => {
     // State
     const [gender, setGender] = useState();
@@ -103,16 +104,6 @@ export const Profile = () => {
         if (file) {
             const image = URL.createObjectURL(file);
             setImage(image);
-        }
-    };
-
-    // Image Size Validator Function
-    const validateFileSize = (fileList) => {
-        const maxSize = 10 * 1024 * 1024;
-        if (fileList[0] && fileList[0].size > maxSize) {
-            return "File size should not exceed 10MB";
-        } else {
-            return true;
         }
     };
     const handleLogout = () => {

@@ -33,9 +33,9 @@ export const GoogleLogin = () => {
         }
     }, []);
     return (
-        <div className="text-4xl text-center my-20 text-red-900">
+        <div className="text-xl text-center my-10  text-blue-800">
             <AlertBanner message={axiosError} setError={setAxiosError} />{" "}
-            Redirecting....
+            Redirecting to Home Page ...
         </div>
     );
 };

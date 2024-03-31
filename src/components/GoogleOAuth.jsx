@@ -4,7 +4,7 @@ export const GoogleOAuth = () => {
     return (
         <a
             href={getGoogleUrl()}
-            className=" w-full flex space-x-4 font-semibold text-black text-lg justify-center items-center border border-gray-400 py-2 hover:bg-blue-300 rounded-sm hover:text-white transition-all cursor-pointer"
+            className=" w-full flex space-x-4 font-semibold text-black text-lg justify-center items-center border border-gray-400 py-2 hover:bg-gray-200 rounded-sm hover:text-gray-500 transition-all cursor-pointer"
         >
             <svg
                 width="25px"
