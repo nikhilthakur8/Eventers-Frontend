@@ -3,8 +3,9 @@ import Input from "../Input";
 import { useForm } from "react-hook-form";
 import { ArrowRightIcon, CheckCircle } from "lucide-react";
 import axios from "axios";
-import { AlertBanner } from "../AlertBanner";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useDispatch } from "react-redux";
+import { setError } from "../../features/user";
 
 export const ForgotPasswordEmail = () => {
     const {
@@ -12,29 +13,27 @@ export const ForgotPasswordEmail = () => {
         formState: { errors },
         handleSubmit,
     } = useForm();
-    const [message, setMessage] = useState(null);
-    const [axiosError, setAxiosError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [message,setMessage] = useState(null);
+    const dispatch= useDispatch();
     const onSubmit = (data) => {
         setLoading(true);
-        setMessage(null);
         axios
             .post("/api/v1/user/forgot-password", data)
             .then(({ data }) => {
                 setMessage(data);
             })
             .catch((error) => {
-                setAxiosError(
+                dispatch(setError(
                     error.response && error.response.length > 0
                         ? error.message
                         : error.response.data
-                );
+                ));
             })
             .finally(() => setLoading(false));
     };
     return (
         <div className="flex flex-col items-center px-5 sm:px-0 py-24 lg:py-36 mx-auto sm:w-2/3 md:max-w-md">
-            <AlertBanner message={axiosError} setError={setAxiosError} />
             <h1 className="text-3xl text-center font-bold">Forgot Password</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                 <Input

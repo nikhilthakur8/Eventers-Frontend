@@ -1,29 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "./Button";
 import { useFieldArray, useForm } from "react-hook-form";
-import {
-    CalendarClockIcon,
-    CalendarRange,
-    PenIcon,
-    Trash2,
-} from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
+import { CalendarClockIcon, PenIcon, Trash2 } from "lucide-react";
+import { useDispatch } from "react-redux";
 import { EditWrapper } from "./EditWrapper";
 import { Input } from "../Input";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { setEventData } from "../../../../features/user";
 import LoadingBar from "react-top-loading-bar";
-import { AlertBanner } from "../../../AlertBanner";
-import { SuccessBanner } from "../../../SuccessBanner";
+import { setError, setMessage } from "../../../../features/user";
 
-export const RoundsTimeline = ({ onClick }) => {
-    const eventData = useSelector((state) => state.eventData);
+export const RoundsTimeline = ({ onClick, eventData, setEventData }) => {
     const { eventNumber } = useParams();
     const dispatch = useDispatch();
     const ref = useRef(null);
-    const [message, setMessage] = useState(null);
     const defaultValues = {
         title: "Offline Round",
         description:
@@ -73,11 +64,16 @@ export const RoundsTimeline = ({ onClick }) => {
                 withCredentials: true,
             })
             .then(({ data }) => {
-                dispatch(setEventData(data));
-                setMessage("Saved Successfully");
+                setEventData(data);
+                dispatch(setMessage("Saved Successfully"));
             })
             .catch((error) => {
-                setAxiosError(error?.response.data || error.message);
+                console.log(error);
+                dispatch(
+                    setError(
+                        error.response ? error.response.data : error.message
+                    )
+                );
             })
             .finally(() => {
                 ref.current.complete();
@@ -113,11 +109,6 @@ export const RoundsTimeline = ({ onClick }) => {
                         Add Round
                     </button>
                     <LoadingBar color="rgb(40 130 246)" height={7} ref={ref} />
-                    <AlertBanner
-                        message={axiosError}
-                        setError={setAxiosError}
-                    />
-                    <SuccessBanner message={message} setMessage={setMessage} />
 
                     {fields.map((round, index) => (
                         <div

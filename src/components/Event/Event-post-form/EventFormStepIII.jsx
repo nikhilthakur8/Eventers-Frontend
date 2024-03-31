@@ -5,7 +5,6 @@ import {
     CalendarRangeIcon,
     Edit2,
     Eye,
-    Image,
     Medal,
     Menu,
     Newspaper,
@@ -19,14 +18,13 @@ import { AboutEvent } from "./Event-component/AboutEvent";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setEventData } from "../../../features/user";
+import { setError, setMessage } from "../../../features/user";
 import { ImportantDates } from "./Event-component/ImportantDates";
 import { RoundsTimeline } from "./Event-component/RoundsTimeline";
 import { Prizes } from "./Event-component/Prizes";
-import { AlertBanner } from "../../AlertBanner";
 import LoadingBar from "react-top-loading-bar";
-import { SuccessBanner } from "../../SuccessBanner";
 import { Event } from "../Event";
+import { FetchEventData2 } from "../../../hooks/fetchEventData2";
 
 const boxItem = [
     {
@@ -126,8 +124,6 @@ export const EventFormStepIII = () => {
     document.title = "Create Event Step-III - Eventers";
 
     const dispatch = useDispatch();
-    const [axiosError, setAxiosError] = useState(null);
-    const [message, setMessage] = useState(null);
     const ref = useRef(null);
     const navigate = useNavigate();
     function activateEvent() {
@@ -137,16 +133,17 @@ export const EventFormStepIII = () => {
                 withCredentials: true,
             })
             .then(({ data }) => {
-                dispatch(setEventData(data));
-                setMessage("Event created successfully");
+                dispatch(setMessage("Event created successfully"));
                 setTimeout(() => {
                     navigate(`/event/${eventNumber}`);
                     dispatch(setEventData(null));
                 }, 2000);
             })
             .catch((error) => {
-                setAxiosError(
-                    error.response ? error.response.data : error.message
+                dispatch(
+                    setError(
+                        error.response ? error.response.data : error.message
+                    )
                 );
                 setTimeout(() => {
                     if (error.response.status == 401) {
@@ -162,23 +159,8 @@ export const EventFormStepIII = () => {
             });
     }
 
-    useEffect(() => {
-        axios
-            .get(`/api/v1/event/details/${eventNumber}`)
-            .then(({ data }) => {
-                dispatch(setEventData(data));
-            })
-            .catch((error) => {
-                setAxiosError(
-                    error.response ? error.response.data : error.message
-                );
-                setTimeout(() => {
-                    if (error?.response?.status == 404) {
-                        navigate("/event/category");
-                    }
-                }, 2000);
-            });
-    }, [eventNumber]);
+    const { eventData, setEventData } = FetchEventData2(eventNumber);
+
     const handleSectionClick = (section) => {
         setSectionStatus((prevStatus) => ({
             ...prevStatus,
@@ -190,8 +172,6 @@ export const EventFormStepIII = () => {
     return (
         <div className="w-full min-h-[85vh] my-auto">
             <div className="px-5 md:w-1/3 left-0 no-scrollbar absolute h-[80vh] overflow-y-auto  py-5 rounded-md">
-                <AlertBanner message={axiosError} setError={setAxiosError} />
-                <SuccessBanner message={message} setMessage={setMessage} />
                 <LoadingBar color="rgb(40 130 246)" height={7} ref={ref} />
                 <h1 className="text-lg font-semibold mb-3  text-blue-800  px-1">
                     Customise Features
@@ -213,6 +193,8 @@ export const EventFormStepIII = () => {
                                 onClick={() =>
                                     handleSectionClick("isBannerSectionOpen")
                                 }
+                                eventData={eventData}
+                                setEventData={setEventData}
                             />
                         </EditWrapper>
                     )}
@@ -224,6 +206,8 @@ export const EventFormStepIII = () => {
                                         "isBasicDetailSectionOpen"
                                     )
                                 }
+                                eventData={eventData}
+                                setEventData={setEventData}
                             />
                         </EditWrapper>
                     )}
@@ -235,6 +219,8 @@ export const EventFormStepIII = () => {
                                         "isAboutEventSectionOpen"
                                     )
                                 }
+                                eventData={eventData}
+                                setEventData={setEventData}
                             />
                         </EditWrapper>
                     )}
@@ -246,6 +232,8 @@ export const EventFormStepIII = () => {
                                         "isImportantDateSectionOpen"
                                     )
                                 }
+                                setEventData={setEventData}
+                                eventData={eventData}
                             />
                         </EditWrapper>
                     )}
@@ -257,6 +245,8 @@ export const EventFormStepIII = () => {
                                         "isRoundsTimelineSectionOpen"
                                     )
                                 }
+                                setEventData={setEventData}
+                                eventData={eventData}
                             />
                         </EditWrapper>
                     )}
@@ -266,6 +256,8 @@ export const EventFormStepIII = () => {
                                 onClick={() =>
                                     handleSectionClick("isPrizeSectionOpen")
                                 }
+                                setEventData={setEventData}
+                                eventData={eventData}
                             />
                         </EditWrapper>
                     )}
@@ -313,7 +305,11 @@ export const EventFormStepIII = () => {
                     preview || "hidden"
                 } md:block absolute no-scrollbar w-full  bg-white right-0 h-[80vh] overflow-auto py-5 `}
             >
-                <Event w={"w-full sm:w-5/6"} />
+                <Event
+                    w={"w-full sm:w-5/6"}
+                    eventData={eventData}
+                    setEventData={setEventData}
+                />
             </div>
         </div>
     );

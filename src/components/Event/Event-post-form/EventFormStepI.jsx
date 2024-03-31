@@ -1,19 +1,17 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect, useRef, useState } from "react";
+import {  useEffect, useRef, useState } from "react";
 import { Input } from "./Input";
 import { Select } from "./Select";
-import { FormProvider, useForm } from "react-hook-form";
-import { ArrowRight, History } from "lucide-react";
+import {  useForm } from "react-hook-form";
+import { ArrowRight } from "lucide-react";
 import RTE from "./RTE";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import LoadingBar from "react-top-loading-bar";
 import ClipLoader from "react-spinners/ClipLoader";
-import { AlertBanner } from "../../AlertBanner";
-import { setEventData } from "../../../features/user";
-import { SuccessBanner } from "../../SuccessBanner";
+import { setError, setMessage } from "../../../features/user";
 import { validateFileSize } from "../../../hooks/validateFileSize";
 import { FetchEventData } from "../../../hooks/fetchEventData";
 export const EventFormStepI = () => {
@@ -22,15 +20,13 @@ export const EventFormStepI = () => {
     const { search } = useLocation();
     const queryParams = new URLSearchParams(search);
     const type = queryParams.get("type");
-    const [message, setMessage] = useState(null);
     const userDetails = useSelector((state) => state.userData);
     const ref = useRef(null);
     const [loading, setLoading] = useState(false);
-    const [axiosError, setAxiosError] = useState(null);
     const navigate = useNavigate();
-    const eventData = FetchEventData(eventNumber);
+    const { eventData } = FetchEventData(eventNumber);
+    const dispatch = useDispatch();
     document.title = "Create Event Step-I - Eventers";
-
     // React-hook-form
     const {
         register,
@@ -58,7 +54,7 @@ export const EventFormStepI = () => {
                 },
             })
             .then(({ data }) => {
-                setMessage("Step I completed successfully");
+                dispatch(setMessage("Step I completed successfully"));
                 setTimeout(() => {
                     navigate(
                         `/event/create/${eventNumber}/step2/?type=${encodeURIComponent(
@@ -68,8 +64,10 @@ export const EventFormStepI = () => {
                 }, 2000);
             })
             .catch((error) => {
-                setAxiosError(
-                    error.response ? error.response.data : error.message
+                dispatch(
+                    setError(
+                        error.response ? error.response.data : error.message
+                    )
                 );
                 setTimeout(() => {
                     if (error?.response?.status == 401) {
@@ -143,8 +141,6 @@ export const EventFormStepI = () => {
     return (
         <div className="flex flex-col m-5 sm:w-2/3 md:w-3/5 sm:mx-auto">
             <LoadingBar color="rgb(40 130 246)" height={7} ref={ref} />
-            <AlertBanner message={axiosError} setError={setAxiosError} />
-            <SuccessBanner message={message} setMessage={setMessage} />
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 encType="multipart/form-data"

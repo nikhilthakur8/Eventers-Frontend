@@ -1,14 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ArrowLeft, ArrowRight, Plus, Trash2, X } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useFieldArray, useForm } from "react-hook-form";
 import axios from "axios";
 import LoadingBar from "react-top-loading-bar";
-import { login, setEventData } from "../../../features/user";
-import { useDispatch, useSelector } from "react-redux";
-import { AlertBanner } from "../../AlertBanner";
-import { SuccessBanner } from "../../SuccessBanner";
+import { setError, setMessage } from "../../../features/user";
+import { useDispatch } from "react-redux";
+import { FetchEventData2 } from "../../../hooks/fetchEventData2";
 export const EventFormStepII = () => {
     const { eventNumber } = useParams();
     const ref = useRef(null);
@@ -16,11 +15,11 @@ export const EventFormStepII = () => {
     const queryParams = new URLSearchParams(search);
     const type = queryParams.get("type");
     const [participationType, setParticipationType] = useState();
-    const dispatch = useDispatch();
-    const eventData = useSelector((state) => state.eventData);
     const navigate = useNavigate();
-    const [axiosError, setAxiosError] = useState(null);
-    const [message, setMessage] = useState(null);
+    const dispatch = useDispatch();
+
+    const { eventData } = FetchEventData2(eventNumber);
+
     document.title = "Create Event Step-II - Eventers";
     // React Hook Form
     const {
@@ -51,25 +50,6 @@ export const EventFormStepII = () => {
         control,
         name: "contactDetails",
     });
-    useEffect(() => {
-        axios
-            .get(`/api/v1/event/details/${eventNumber}`, {
-                withCredentials: true,
-            })
-            .then(({ data }) => {
-                dispatch(setEventData(data));
-            })
-            .catch((error) => {
-                setAxiosError(
-                    error.response ? error.response.data : error.message
-                );
-                setTimeout(() => {
-                    if (error?.response?.status == 404) {
-                        navigate("/event/category");
-                    }
-                }, 2000);
-            });
-    }, []);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -103,9 +83,8 @@ export const EventFormStepII = () => {
             .post(`/api/v1/event/create/${eventNumber}/step2`, data, {
                 withCredentials: true,
             })
-            .then(({ data }) => {
-                dispatch(setEventData(data));
-                setMessage("Step II completed successfully");
+            .then(() => {
+                dispatch(setMessage("Step II completed successfully"));
                 setTimeout(() => {
                     navigate(
                         `/event/create/${eventNumber}/step3?type=${encodeURIComponent(
@@ -115,7 +94,11 @@ export const EventFormStepII = () => {
                 }, 2000);
             })
             .catch((error) => {
-                setAxiosError(error?.response.data || error?.message);
+                dispatch(
+                    setError(
+                        error.response ? error.response.data : error.message
+                    )
+                );
                 setTimeout(() => {
                     if (error?.response?.status == 401) {
                         navigate("/login");
@@ -132,9 +115,7 @@ export const EventFormStepII = () => {
 
     return (
         <div className="p-5 sm:w-2/3 md:w-3/5 w-full mx-auto min-h-screen">
-            <AlertBanner message={axiosError} setError={setAxiosError} />
             <LoadingBar color="rgb(40 130 246)" height={7} ref={ref} />
-            <SuccessBanner message={message} setMessage={setMessage} />
             <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                 <h1
                     className="text-md font-semibold mb-3  text-blue-800 bg-white px-1"

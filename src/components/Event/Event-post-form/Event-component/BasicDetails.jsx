@@ -1,27 +1,22 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "./Button";
 import { useForm } from "react-hook-form";
 import { Input } from "../Input";
 import { Select } from "../Select";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { setEventData } from "../../../../features/user";
-import { AlertBanner } from "../../../AlertBanner";
+import { useDispatch } from "react-redux";
+import { setError, setMessage } from "../../../../features/user";
 import LoadingBar from "react-top-loading-bar";
-import { SuccessBanner } from "../../../SuccessBanner";
-export const BasicDetails = ({ onClick }) => {
-    const eventData = useSelector((state) => state.eventData);
+export const BasicDetails = ({ onClick, eventData, setEventData }) => {
     const { eventNumber } = useParams();
     const dispatch = useDispatch();
     const [modeOfEvent, setModeOfEvent] = useState();
     const [image, setImage] = useState(
         "https://buffer.com/library/content/images/2023/10/free-images.jpg"
     );
-    const [axiosError, setAxiosError] = useState(null);
-    const [message, setMessage] = useState(null);
     const ref = useRef(null);
     const {
         register,
@@ -52,11 +47,15 @@ export const BasicDetails = ({ onClick }) => {
                 }
             )
             .then(({ data }) => {
-                dispatch(setEventData(data));
-                setMessage("Success");
+                setEventData(data);
+                dispatch(setMessage("Saved Successfully"));
             })
             .catch((error) => {
-                setAxiosError(error?.response.data || error.message);
+                dispatch(
+                    setError(
+                        error.response ? error.response.data : error.message
+                    )
+                );
             })
             .finally(() => {
                 ref.current.complete();
@@ -108,8 +107,6 @@ export const BasicDetails = ({ onClick }) => {
     return (
         <div>
             <LoadingBar color="rgb(40 130 246)" height={7} ref={ref} />
-            <AlertBanner message={axiosError} setError={setAxiosError} />
-            <SuccessBanner message={message} setMessage={setMessage} />
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 encType={"multipart/form-data"}

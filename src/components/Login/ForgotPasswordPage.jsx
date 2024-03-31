@@ -1,12 +1,12 @@
-import { ArrowRightIcon, CheckCircle, EyeIcon, EyeOffIcon } from "lucide-react";
+import { ArrowRightIcon,  EyeIcon, EyeOffIcon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Input } from "../service";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { SuccessBanner } from "../SuccessBanner";
 import ClipLoader from "react-spinners/ClipLoader";
-import { AlertBanner } from "../AlertBanner";
+import { setError, setMessage } from "../../features/user";
+import { useDispatch } from "react-redux";
 
 function ForgotPasswordPage() {
     const { id, token } = useParams();
@@ -16,33 +16,30 @@ function ForgotPasswordPage() {
         register,
         handleSubmit,
     } = useForm();
-    const [message, setMessage] = useState(null);
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
     const navigate = useNavigate();
     function onSubmit(data) {
         setLoading(true);
         axios
             .post(`/api/v1/user/${id}/reset-password/${token}`, data)
             .then(({ data }) => {
-                setMessage(data);
+                dispatch(setMessage(data));
                 setTimeout(() => {
                     navigate("/login");
                 }, 2000);
             })
             .catch((error) => {
-                setError(
+                dispatch(setError(
                     error.response && error.response.length > 0
                         ? error.message
                         : error.response.data
-                );
+                ));
             })
             .finally(() => setLoading(false));
     }
     return (
         <div className="flex flex-col items-center px-5 sm:px-0 py-24 lg:py-36 mx-auto sm:w-2/3 md:max-w-md">
-            <AlertBanner message={error} setError={setError} />
-            <SuccessBanner message={message} setMessage={setMessage} />
             <div className="w-full">
                 <h1 className="text-3xl text-center font-bold">
                     Reset Password

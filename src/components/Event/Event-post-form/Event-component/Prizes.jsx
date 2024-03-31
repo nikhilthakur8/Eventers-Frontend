@@ -1,17 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Input } from "../Input";
 import { Trash2 } from "lucide-react";
 import { Button } from "./Button";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { setEventData } from "../../../../features/user";
-import { useDispatch, useSelector } from "react-redux";
-import { AlertBanner } from "../../../AlertBanner";
+import { useDispatch } from "react-redux";
 import LoadingBar from "react-top-loading-bar";
-import { SuccessBanner } from "../../../SuccessBanner";
-export const Prizes = ({ onClick }) => {
+import { setError, setMessage } from "../../../../features/user";
+export const Prizes = ({ onClick, eventData, setEventData }) => {
     const defaultValue = {
         rank: "",
         cashAmount: "",
@@ -27,13 +25,11 @@ export const Prizes = ({ onClick }) => {
             ["prizes"]: defaultValue,
         },
     });
-    const [message, setMessage] = useState(null);
     const { eventNumber } = useParams();
     const { fields, append, remove } = useFieldArray({
         control,
         name: "prizes",
     });
-    const eventData = useSelector((state) => state.eventData);
     useEffect(() => {
         if (eventData) setValueInForm(eventData);
     }, [eventData]);
@@ -43,7 +39,6 @@ export const Prizes = ({ onClick }) => {
         });
     }
     const ref = useRef(null);
-    const [axiosError, setAxiosError] = useState();
     const dispatch = useDispatch();
     function onSubmit(data) {
         ref.current.continuousStart();
@@ -53,11 +48,11 @@ export const Prizes = ({ onClick }) => {
                 withCredentials: true,
             })
             .then(({ data }) => {
-                dispatch(setEventData(data));
-                setMessage("Saved Successfully");
+                setEventData(data);
+                dispatch(setMessage("Saved Successfully"));
             })
             .catch((error) => {
-                setAxiosError(error?.response.data || error?.message);
+                dispatch(setError(error?.response.data || error?.message));
             })
             .finally(() => {
                 ref.current.complete();
@@ -66,9 +61,7 @@ export const Prizes = ({ onClick }) => {
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <AlertBanner message={axiosError} setError={setAxiosError} />
                 <LoadingBar color="rgb(40 130 246)" height={7} ref={ref} />
-                <SuccessBanner message={message} setMessage={setMessage} />
                 <div className="p-5 sm:p-10">
                     <h1 className="text-3xl font-bold font-serif text-blue-900 mb-5">
                         Prizes

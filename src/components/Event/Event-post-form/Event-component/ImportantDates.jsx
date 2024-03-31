@@ -5,17 +5,13 @@ import { Plus, Trash2, Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Button } from "./Button";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import LoadingBar from "react-top-loading-bar";
-import { AlertBanner } from "../../../AlertBanner";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { setEventData } from "../../../../features/user";
-import { SuccessBanner } from "../../../SuccessBanner";
-export const ImportantDates = ({ onClick }) => {
-    const eventData = useSelector((state) => state.eventData);
+import { setError, setMessage } from "../../../../features/user";
+export const ImportantDates = ({ onClick, eventData, setEventData }) => {
     const [fileName, setFileName] = useState("Choose File");
-    const [axiosError, setAxiosError] = useState(null);
     const { eventNumber } = useParams();
     const dispatch = useDispatch();
     const defaultValue = {
@@ -58,7 +54,6 @@ export const ImportantDates = ({ onClick }) => {
         name: "contactDetails",
     });
     const ref = useRef(null);
-    const [message, setMessage] = useState();
     function onSubmit(data) {
         ref.current.continuousStart();
         if (data?.eventBrochure && !(typeof data.eventBrochure === "string")) {
@@ -80,11 +75,11 @@ export const ImportantDates = ({ onClick }) => {
                 }
             )
             .then(({ data }) => {
-                dispatch(setEventData(data));
-                setMessage("Saved Successfully");
+                setEventData(data);
+                dispatch(setMessage("Saved Successfully"));
             })
             .catch((error) => {
-                setAxiosError(error?.response.data || error.message);
+                dispatch(setError(error?.response.data || error.message));
             })
             .finally(() => {
                 ref.current.complete();
@@ -121,7 +116,6 @@ export const ImportantDates = ({ onClick }) => {
         });
     }
     useEffect(() => {
-        console.log(eventData);
         setValueInForm(eventData);
     }, [eventData]);
 
@@ -129,8 +123,6 @@ export const ImportantDates = ({ onClick }) => {
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <LoadingBar color="rgb(40 130 246)" height={7} ref={ref} />
-                <AlertBanner message={axiosError} setError={setAxiosError} />
-                <SuccessBanner message={message} setMessage={setMessage} />
                 <div className="p-5 sm:p-10">
                     <div className="my-5 shadow-lg px-3 sm:px-5 py-5 rounded-md shadow-gray-300">
                         <h1 className="text-3xl font-bold font-serif text-blue-900 mb-5">

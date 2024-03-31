@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import Auth from "./Auth.jsx";
@@ -27,9 +27,10 @@ import { Feedback } from "./components/Feedback.jsx";
 import { GoogleLogin } from "./components/GoogleLogin.jsx";
 import { PrivacyPolicy } from "./components/PrivacyPolicy.jsx";
 import { ForgotPasswordEmail } from "./components/Login/ForgotPasswordEmail.jsx";
+import { Index } from "./Index.jsx";
 const router = createBrowserRouter(
     createRoutesFromElements(
-        <Route>
+        <Route path="/" element={<Index />}>
             <Route path="/" element={<App />}>
                 <Route path="/" element={<Home />} />
                 <Route path="event/:eventNumber" element={<Event />} />
@@ -68,6 +69,7 @@ const router = createBrowserRouter(
         </Route>
     )
 );
+
 ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
         <RouterProvider router={router}>

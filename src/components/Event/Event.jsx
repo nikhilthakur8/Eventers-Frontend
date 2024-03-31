@@ -1,9 +1,8 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setEventData } from "../../features/user";
+import  { useEffect, useState } from "react";
+import { Link,  useParams } from "react-router-dom";
+import {  useSelector } from "react-redux";
 import {
     Building2,
     CalendarClockIcon,
@@ -33,34 +32,16 @@ const rankToName = {
     7: "Sixth Runner Up",
 };
 import { RWebShare } from "react-web-share";
-
-export const Event = ({ w, eventDetails }) => {
+import { FetchEventData2 } from "../../hooks/fetchEventData2";
+export const Event = ({ w, eventData, setEventData }) => {
     const { eventNumber } = useParams();
-    const dispatch = useDispatch();
-    const eventData = useSelector((state) => state.eventData);
     const userData = useSelector((state) => state.userData);
     const [axiosError, setAxiosError] = useState(null);
     const [isClicked, setClicked] = useState(false);
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (!eventDetails)
-            axios
-                .get(`/api/v1/event/details/${eventNumber}`, {
-                    withCredentials: true,
-                })
-                .then(({ data }) => {
-                    dispatch(setEventData(data));
-                })
-                .catch((error) => {
-                    setAxiosError(
-                        error.response ? error.response.data : error.message
-                    );
-                    setTimeout(() => {
-                        navigate("/");
-                    }, 3000);
-                });
-        else dispatch(setEventData(eventDetails));
-    }, [eventNumber]);
+    if (!eventData && !setEventData) {
+        const { eventData: eventDetails } = FetchEventData2(eventNumber);
+        eventData = eventDetails;
+    }
     useEffect(() => {
         window.scrollBy(-20000, -200000);
     }, []);
@@ -178,7 +159,7 @@ export const Event = ({ w, eventDetails }) => {
                         className="text-blue-900"
                         target="_blank"
                     >
-                        <EditIcon className="absolute inset-y-1/2  right-5 " />
+                        <EditIcon className="absolute inset-y-1/2 -mt-4 right-5 " />
                     </Link>
                 )}
             </div>

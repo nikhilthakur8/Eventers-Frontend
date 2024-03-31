@@ -4,14 +4,15 @@ import { Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "./Button";
-import { useDispatch, useSelector } from "react-redux";
-import { setEventData } from "../../../../features/user";
+import { useDispatch } from "react-redux";
+import {
+    setError,
+    setMessage,
+} from "../../../../features/user";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
-import { AlertBanner } from "../../../AlertBanner";
-import { SuccessBanner } from "../../../SuccessBanner";
-export const EventBanner = ({ onClick }) => {
+export const EventBanner = ({ onClick, eventData, setEventData }) => {
     const {
         handleSubmit,
         register,
@@ -24,9 +25,6 @@ export const EventBanner = ({ onClick }) => {
     const dispatch = useDispatch();
     const { eventNumber } = useParams();
     const ref = useRef(null);
-    const [axiosError, setAxiosError] = useState(null);
-    const [message, setMessage] = useState(null);
-    const eventData = useSelector((state) => state.eventData);
 
     // onsubmit Function
     function onSubmit(data) {
@@ -47,11 +45,11 @@ export const EventBanner = ({ onClick }) => {
                 }
             )
             .then(({ data }) => {
-                dispatch(setEventData(data));
-                setMessage("Success");
+                setEventData(data);
+                dispatch(setMessage("Saved Successfully"));
             })
             .catch((error) => {
-                setAxiosError(error?.response.data || error.message);
+                dispatch(setError(error?.response.data || error.message));
             })
             .finally(() => {
                 ref.current.complete();
@@ -97,8 +95,6 @@ export const EventBanner = ({ onClick }) => {
     return (
         <>
             <LoadingBar color="rgb(40 130 246)" height={7} ref={ref} />
-            <AlertBanner message={axiosError} setError={setAxiosError} />
-            <SuccessBanner message={message} setMessage={setMessage} />
             <div className="p-5 sm:p-10">
                 <h1 className="text-3xl font-bold font-serif text-blue-900 mb-5">
                     Event Banner

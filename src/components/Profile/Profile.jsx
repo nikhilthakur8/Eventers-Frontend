@@ -8,12 +8,10 @@ import male from "../../assets/male.png";
 import female from "../../assets/female.png";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../features/user";
+import { login, setError, setMessage } from "../../features/user";
 import LoadingBar from "react-top-loading-bar";
 import ClipLoader from "react-spinners/ClipLoader";
-import { SuccessBanner } from "../SuccessBanner";
 import { useNavigate } from "react-router-dom";
-import { AlertBanner } from "../AlertBanner";
 import { validateFileSize } from "../../hooks/validateFileSize";
 export const Profile = () => {
     // State
@@ -23,8 +21,6 @@ export const Profile = () => {
     );
     const [loading, setLoading] = useState(false);
     const [selected, setSelected] = useState(false);
-    const [message, setMessage] = useState(null);
-    const [axiosError, setAxiosError] = useState(null);
     const dispatch = useDispatch();
     const loadingBar = useRef(null);
     const userDetails = useSelector((state) => state.userData);
@@ -75,12 +71,16 @@ export const Profile = () => {
             .then(({ data }) => {
                 setValueInForm(data);
                 dispatch(login(data));
-                setMessage("Profile Updated Successfully");
+                dispatch(setMessage("Profile Updated Successfully"));
             })
             .catch((err) => {
-                err.response && err.response.length > 0
-                    ? err.message
-                    : err.response.data;
+                dispatch(
+                    setError(
+                        err.response && err.response.length > 0
+                            ? err.message
+                            : err.response.data
+                    )
+                );
             })
             .finally(() => {
                 loadingBar.current.complete();
@@ -110,25 +110,23 @@ export const Profile = () => {
         axios
             .get("api/v1/user/logout")
             .then(() => {
-                setMessage("Logged out successfully");
+                dispatch(setMessage("Logged out successfully"));
                 dispatch(login(null));
-                setTimeout(() => {
-                    navigate("/login");
-                }, 2000);
+                navigate("/login");
             })
             .catch((err) => {
-                setAxiosError(
-                    err.response && err.response.length > 0
-                        ? err.response.data
-                        : err.message
+                dispatch(
+                    setError(
+                        err.response && err.response.length > 0
+                            ? err.response.data
+                            : err.message
+                    )
                 );
             });
     };
     return (
         <div className="w-full sm:w-2/3 md:w-3/5 mx-auto shadow-lg rounded-lg my-5 ">
             <LoadingBar color="rgb(40 130 246)" height={7} ref={loadingBar} />
-            <AlertBanner message={axiosError} setError={setAxiosError} />
-            <SuccessBanner message={message} setMessage={setMessage} />
             <div className="flex justify-center py-7">
                 <div className="inline relative ">
                     <img

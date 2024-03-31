@@ -2,9 +2,11 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import NavBar from "./components/NavBar/NavBar";
 import { Footer } from "./components/Footer/Footer";
 import axios from "axios";
-import { login } from "./features/user";
+import { login, setError, setRef } from "./features/user";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AlertBanner } from "./components/AlertBanner";
+import LoadingBar from "react-top-loading-bar";
 function Auth() {
     const dispatch = useDispatch();
     const navigate = useNavigate();

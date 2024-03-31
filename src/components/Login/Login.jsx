@@ -13,12 +13,11 @@ import ClipLoader from "react-spinners/ClipLoader";
 import LoadingBar from "react-top-loading-bar";
 import { AlertBanner } from "../AlertBanner";
 import { useDispatch } from "react-redux";
-import { login } from "../../features/user";
+import { login, setError } from "../../features/user";
 import { GoogleOAuth } from "../GoogleOAuth";
 function Login() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const loadingBar = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -42,10 +41,12 @@ function Login() {
                 navigate("/");
             })
             .catch((error) => {
-                setError(
-                    error.response && error.response.length > 0
-                        ? error.message
-                        : error.response.data
+                dispatch(
+                    setError(
+                        error.response && error.response.length > 0
+                            ? error.message
+                            : error.response.data
+                    )
                 );
             })
             .finally(() => {
@@ -57,9 +58,6 @@ function Login() {
     return (
         <div className="flex flex-col items-center px-5 sm:px-0 py-14 lg:py-20 mx-auto sm:w-2/3 md:max-w-md">
             <LoadingBar color="rgb(59 130 246)" height={7} ref={loadingBar} />
-
-            {error && <AlertBanner message={error} setError={setError} />}
-
             <div className="w-full">
                 <h1 className="text-3xl text-center font-bold">
                     Login your account

@@ -14,7 +14,7 @@ import { AlertBanner } from "../AlertBanner";
 import LoadingBar from "react-top-loading-bar";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useDispatch } from "react-redux";
-import { login } from "../../features/user";
+import { login, setError } from "../../features/user";
 import { GoogleOAuth } from "../GoogleOAuth";
 
 function Signup() {
@@ -22,7 +22,6 @@ function Signup() {
     const dispatch = useDispatch();
     const loadingBar = useRef(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const [message, setMessage] = useState(null);
     document.title = "Signup - Eventers";
     const {
@@ -43,7 +42,11 @@ function Signup() {
                 setMessage(data);
             })
             .catch((error) => {
-                setError(error.response ? error.response.data : error.message);
+                dispatch(
+                    setError(
+                        error.response ? error.response.data : error.message
+                    )
+                );
             })
             .finally(() => {
                 loadingBar.current.complete();
@@ -54,7 +57,6 @@ function Signup() {
     return (
         <div className="flex flex-col items-center px-5 sm:px-0 py-14 lg:py-20 mx-auto sm:w-2/3 md:max-w-md">
             <LoadingBar color="rgb(59 130 246)" height={7} ref={loadingBar} />
-            <AlertBanner message={error} setError={setError} />
             <div className="w-full">
                 <h1 className="text-3xl text-center font-bold">
                     Sign up to Eventers

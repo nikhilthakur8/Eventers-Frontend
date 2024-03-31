@@ -20,9 +20,9 @@ function HeroSection() {
                     showcase skills, Enjoy Annual fest.
                 </p>
             </div>
-            <div className="w-5/6  lg:w-5/12 grid grid-cols-2 grid-rows-6  gap-4 font-medium">
+            <div className="w-10/12  lg:w-5/12 grid grid-cols-2 grid-rows-6  gap-4 font-medium">
                 <Link
-                    className="row-span-2 overflow-hidden shadow-lg p-3 relative rounded-xl h-32 hover:-translate-y-1 transition-all  bg-[#c8bbff]"
+                    className="row-span-2 overflow-hidden shadow-lg p-3 relative rounded-xl h-28 sm:h-36 hover:-translate-y-1 transition-all  bg-[#c8bbff]"
                     to={`/event/search?type=${encodeURIComponent(
                         "Hackathon & Coding Challenges"
                     )}`}
@@ -57,7 +57,7 @@ function HeroSection() {
                     />
                 </Link>
                 <Link
-                    className="row-span-2 p-3 shadow-lg  overflow-hidden z-10 relative rounded-xl h-32 bg-[#ffb1cc]  hover:-translate-y-1 transition-all"
+                    className="row-span-2 p-3 shadow-lg  overflow-hidden z-10 relative rounded-xl h-28 sm:h-36 bg-[#ffb1cc]  hover:-translate-y-1 transition-all"
                     to={`/event/search?type=${encodeURIComponent(
                         "Competitions & Challenges"
                     )}`}
@@ -76,9 +76,7 @@ function HeroSection() {
                 </Link>
                 <Link
                     className="row-span-3 relative overflow-hidden shadow-lg rounded-xl h-full p-3 bg-[#fec192]  hover:-translate-y-1 transition-all"
-                    to={`/event/search?type=${encodeURIComponent(
-                        "Fest"
-                    )}`}
+                    to={`/event/search?type=${encodeURIComponent("Fest")}`}
                 >
                     <p>Annual Fest</p>
                     <p className="text-xs text-gray-700 leading-3">Explore</p>
@@ -90,7 +88,7 @@ function HeroSection() {
                     />
                 </Link>
                 <Link
-                    className="bg-green-200 overflow-hidden relative z-10 shadow-lg p-3 rounded-xl h-32 row-span-2  hover:-translate-y-1 transition-all"
+                    className="bg-green-200 overflow-hidden relative z-10 shadow-lg p-3 rounded-xl h-h-28 sm:h-36 row-span-2  hover:-translate-y-1 transition-all"
                     to={`/event/search?type=${encodeURIComponent(
                         "Webinars & Workshops"
                     )}`}

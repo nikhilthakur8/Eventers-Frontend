@@ -102,42 +102,38 @@ export const EventDetails = ({ eventData }) => {
             </div>
 
             {/* Event Logo and Event Heading */}
-
-            <div className="px-5 py-10  hover:bg-blue-50 flex group space-x-4 relative">
-                <img
-                    src={eventData?.eventLogo}
-                    className="w-20 h-20 rounded-lg "
-                />
-                <div className="text-blue-900">
-                    <p className="font-bold uppercase text-xl text-blue-900">
-                        {eventData?.eventName}
-                    </p>
-                    <div className="flex font-semibold items-center space-x-1 mt-1.5 text-sm">
-                        <Building2 className="text-blue-900" size={23} />
-                        <p>{eventData?.organisationName}</p>
-                    </div>
-                    {eventData?.stateName && eventData?.cityName && (
-                        <div className="flex items-center font-semibold space-x-1 mt-1.5 text-sm">
-                            <MapPin className="text-blue-900" size={20} />
-                            <p>{eventData?.stateName},</p>
-                            <p>{eventData?.cityName}</p>
+            <Link to={`/event/${eventData?.eventNumber}`} target="_blank">
+                <div className="px-5 py-10  hover:bg-blue-50 flex group space-x-4 relative">
+                    <img
+                        src={eventData?.eventLogo}
+                        className="w-20 h-20 rounded-lg "
+                    />
+                    <div className="text-blue-900">
+                        <p className="font-bold uppercase text-xl text-blue-900">
+                            {eventData?.eventName}
+                        </p>
+                        <div className="flex font-semibold items-center space-x-1 mt-1.5 text-sm">
+                            <Building2 className="text-blue-900" size={23} />
+                            <p>{eventData?.organisationName}</p>
                         </div>
+                        {eventData?.stateName && eventData?.cityName && (
+                            <div className="flex items-center font-semibold space-x-1 mt-1.5 text-sm">
+                                <MapPin className="text-blue-900" size={20} />
+                                <p>{eventData?.stateName},</p>
+                                <p>{eventData?.cityName}</p>
+                            </div>
+                        )}
+                    </div>
+                    {!setEventDate(eventData?.endDate) && (
+                        <p className="absolute top-0 right-0 px-3 py-1 text-white font-medium rounded-bl-lg bg-red-500">
+                            Expired
+                        </p>
                     )}
+                    <div>
+                        <ExternalLink className="text-blue-900 group-hov  absolute top-1/2 -mt-4 right-5 " />
+                    </div>
                 </div>
-                {!setEventDate(eventData?.endDate) && (
-                    <p className="absolute top-0 right-0 px-3 py-1 text-white font-medium rounded-bl-lg bg-red-500">
-                        Expired
-                    </p>
-                )}
-                <div>
-                    <Link
-                        to={`/event/${eventData?.eventNumber}`}
-                        target="_blank"
-                    >
-                        <ExternalLink className="text-blue-900 group-hover:block hidden absolute top-1/2 right-5 " />
-                    </Link>
-                </div>
-            </div>
+            </Link>
 
             <div className="h-0.5 bg-gray-200"></div>
             {/* Event Reg Deadline and Team Size */}
