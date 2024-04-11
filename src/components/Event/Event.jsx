@@ -42,24 +42,6 @@ export const Event = ({ w, eventData, setEventData }) => {
         const { eventData: eventDetails } = FetchEventData2(eventNumber);
         eventData = eventDetails;
     }
-    const [isScrolled, setIsScrolled] = useState(true);
-    useEffect(() => {
-        const handleScroll = () => {
-            console.log(window.scrollY);
-            if (window.scrollY > 1000) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
-
     useEffect(() => {
         window.scrollBy(-20000, -200000);
     }, []);
@@ -439,12 +421,7 @@ export const Event = ({ w, eventData, setEventData }) => {
             <div className="h-0.5 bg-gray-200"></div>
 
             {/* Guildlines */}
-            <div
-                className={`text-blue-900 px-5 py-10 ${
-                    isScrolled ? "-translate-y-5" : ""
-                } transition-transform duration-300`}
-                id="aboutEvent"
-            >
+            <div className={`text-blue-900 px-5 py-10 `} id="aboutEvent">
                 <h1 className="text-xl font-bold mb-4">About Event</h1>
                 <div
                     className="ml-5 "
