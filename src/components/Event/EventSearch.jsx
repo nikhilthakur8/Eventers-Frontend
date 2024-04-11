@@ -217,8 +217,8 @@ export const EventSearch = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-12 py-5 lg:w-11/12 mx-auto ">
-                <div className="lg:col-span-4 md:col-span-5 col-span-12 overflow-auto  sm:no-scrollbar hide-scrollbar  px-5 max-h-[82vh]">
+            <div className="grid grid-cols-12 py-5 lg:w-11/12 mx-auto">
+                <div className="lg:col-span-4 md:col-span-5 col-span-12 overflow-auto  sm:no-scrollbar hide-scrollbar  px-5 h-[65vh] md:h-[82vh]">
                     {(searchQuery ? filteredEvent : allEvent).map(
                         (event, index) => (
                             <button
