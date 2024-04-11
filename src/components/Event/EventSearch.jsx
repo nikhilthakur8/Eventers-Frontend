@@ -218,7 +218,7 @@ export const EventSearch = () => {
             </div>
 
             <div className="grid grid-cols-12 py-5 lg:w-11/12 mx-auto ">
-                <div className="lg:col-span-4 md:col-span-5 col-span-12 min-h-[65vh] overflow-auto  sm:no-scrollbar hide-scrollbar  px-5 ">
+                <div className="lg:col-span-4 md:col-span-5 col-span-12 overflow-auto  sm:no-scrollbar hide-scrollbar  px-5 max-h-[82vh]">
                     {(searchQuery ? filteredEvent : allEvent).map(
                         (event, index) => (
                             <button
@@ -226,7 +226,7 @@ export const EventSearch = () => {
                                 className={`block w-full border
                             ${
                                 cardClick == index && "border-blue-700 border-2"
-                            } border-blue-200 bg-white rounded-lg my-5 relative cursor-pointer`}
+                            } border-blue-200 bg-white rounded-lg my-5 relative cursor-pointer `}
                                 onClick={() => {
                                     setCardClick(index);
                                     setEventData(event);
